@@ -1,38 +1,49 @@
-from fastapi import FastAPI, status, HTTPException, Depends, APIRouter
+import logging
+from typing import List
+from fastapi import status, HTTPException, Depends, APIRouter
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from .. import models, schemas, utils
+
+from ..schemas import user as user_schema
+from ..crud import user as crud_user
 
 router = APIRouter(
+    prefix="/users",
     tags=['Users'],
 )
 
 
-@router.post("/users", status_code=status.HTTP_201_CREATED, response_model=schemas.User)
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    # hash password
-    hashed_pwd = utils.hash_pwd(user.password)
-    user.password = hashed_pwd
+@router.get("", response_model=List[user_schema.User])
+def get_user(db: Session = Depends(get_db)):
+    user = crud_user.get_users(db)
 
+    return user
+
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=user_schema.User)
+def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
     try:
-        cuser = models.User(**user.dict())
-        db.add(cuser)
-        db.commit()
-        db.refresh(cuser)
-    except Exception:
-        # if cuser is None:
+        return crud_user.create_user(db, user)
+
+    except ValidationError as e:
+        logging.error(f"Validation error: {str(e)}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    except Exception as e:
+        logging.error(f"Validation error: {str(e)}")
+        db.rollback()
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Bad Request")
-        # raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
-    return cuser
+    finally:
+        db.close()
 
 
-@router.get("/users/{id}", response_model=schemas.User)
+@router.get("/{id}", response_model=user_schema.User)
 def get_user(id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id == id).first()
+    user = crud_user.get_user(db, id)
 
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id : {id} does not exist")
-
+    
     return user

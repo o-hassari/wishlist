@@ -2,21 +2,35 @@ version: "3"
 
 services:
   # Database
+  #db:
+  #  platform: linux/x86_64
+  #  image: mysql:5.7
+  #  volumes:
+  #    - db_data:/var/lib/mysql
+  #  restart: always
+  #  ports:
+  #    - "3306:3306"
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: password
+  #    MYSQL_DATABASE: yourdb
+  #    MYSQL_PASSWORD: password
+  #  networks:
+  #    - mysql-phpmyadmin
+
   db:
-    platform: linux/x86_64
-    image: mysql:5.7
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-    ports:
-      - "3306:3306"
+    image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: yourdb
+      #MYSQL_DATABASE: mydatabase
+      #MYSQL_USER: root
       MYSQL_PASSWORD: password
+    volumes:
+      - data:/var/lib/mysql
+      - ./dev/mariadb:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
     networks:
-      - mysql-phpmyadmin
-
+     - mysql-phpmyadmin
   # phpmyadmin
   phpmyadmin:
     depends_on:
@@ -35,4 +49,4 @@ networks:
   mysql-phpmyadmin:
 
 volumes:
-  db_data:
+  data:
