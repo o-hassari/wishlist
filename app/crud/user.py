@@ -29,3 +29,8 @@ def create_user(db: Session, user: user_schema.UserCreate):
         db.refresh(cuser)
 
         return cuser
+
+def delete_user(db: Session, user_id: int):
+     duser = db.query(user_model.User).filter(user_model.User.id == user_id).delete()
+     db.commit()
+     return duser
