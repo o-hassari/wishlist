@@ -44,7 +44,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     user = crud_user.get_user(db, id)
 
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id : {id} does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id={id} does not exist")
     
     return user
 
@@ -53,5 +53,5 @@ def delete_user(id: int, db: Session = Depends(get_db)):
     
     user = crud_user.delete_user(db, id)
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id : {id} does not exist")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id={id} does not exist")
     return Response(status_code=status.HTTP_200_OK)

@@ -5,7 +5,7 @@ from app.database import engine
 
 from fastapi import FastAPI
 
-from .routes import users, items
+from .routes import users, wishlists, items
 
 from app.models import user
 
@@ -28,6 +28,7 @@ app.add_middleware(
 )
 
 app.include_router(users.router)
+app.include_router(wishlists.router)
 app.include_router(items.router)
 
 @app.get("/healthchecker", tags=['Health check'])
