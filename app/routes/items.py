@@ -14,9 +14,11 @@ router = APIRouter(
     tags=['Items'],
 )
 
+@router.delete("/{item_id}", response_model=None)
+def delete_item(item_id: int,  db: Session = Depends(get_db)):
+    item = crud_item.delete_item(db, item_id)
 
-@router.get("", response_model=List[item_schema.Item])
-def get_user(db: Session = Depends(get_db)):
-    items = crud_item.get_items(db)
-
-    return items
+    if not item:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Item with id={item_id} does not exist") 
+    
+    return Response(status_code=status.HTTP_200_OK)

@@ -11,11 +11,7 @@ from app.models import user
 
 user.Base.metadata.create_all(bind=engine)
 
-
 app = FastAPI(title="wishlist", version="1.0.0")
-
-
-
 
 origins = ["*"]
 

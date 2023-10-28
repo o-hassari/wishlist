@@ -1,3 +1,4 @@
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from ..models import wishlist as wishlist_model
@@ -7,7 +8,7 @@ def get_wishlists(db: Session, skip: int = 0, limit: int = 100):
     return db.query(wishlist_model.Wishlist).offset(skip).limit(limit).all()
 
 def get_wishlist(db: Session, wishlist_id: int):
-    return db.query(wishlist_model.Wishlist).filter(wishlist_model.Wishlist.id == wishlist_id).first()
+    return db.query(wishlist_model.Wishlist).filter(wishlist_model.Wishlist.id == wishlist_id)
 
 def create_wishlist(db: Session, wishlist: wishlist_schema.WishlistCreate):
         wishlist_dict = wishlist.model_dump()
@@ -19,6 +20,10 @@ def create_wishlist(db: Session, wishlist: wishlist_schema.WishlistCreate):
 
         return cwishlist
 
+def update_wishlist(db: Session, wishlist: wishlist_schema.WishlistUpdate, wishlist_id: int):
+     wish_dict = wishlist.model_dump(exclude_defaults=True, exclude_none=True)
+     query = update(wishlist_model.Wishlist).where(wishlist_model.Wishlist.id == wishlist_id).values(wish_dict)
+     db.execute(query)
 
 def delete_wishlist(db: Session, wishlist_id: int):
      dwishlist = db.query(wishlist_model.Wishlist).filter(wishlist_model.Wishlist.id == wishlist_id).delete()

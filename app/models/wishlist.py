@@ -27,10 +27,10 @@ class Item(Base):
     __tablename__ = 'items'
 
     id = Column(Integer, primary_key=True, nullable=False)
-    link = Column(String(100))
-    name = Column(String(100))
+    link = Column(String())
+    name = Column(String(100), unique=True)
     price = Column(Float)
-    image = Column(String(100))
+    image = Column(String())
     description = Column(String(300))
 
     wishlist_id = Column(Integer,ForeignKey('wishlists.id', ondelete="CASCADE"), nullable=False)
