@@ -39,5 +39,12 @@ class ItemCreate(BaseModel):
     image: str
     description: str
 
+class ItemUpdate(BaseModel):
+    link: Optional[str] = None
+    name: Optional[str] = None
+    price: Optional[float] = None
+    image: Optional[str] = None
+    description: str | None = None   
+
 class WishlistItem(Wishlist):
     items: List[Item]

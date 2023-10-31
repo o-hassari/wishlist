@@ -207,7 +207,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"link\":\"t\",\r\n        \"name\":\"tttt\",\r\n        \"price\":20.02,\r\n        \"image\":\"0\",\r\n        \"description\":\"test\"\r\n    },\r\n        {\r\n        \"link\":\"t\",\r\n        \"name\":\"tttt\",\r\n        \"price\":20.02,\r\n        \"image\":\"0\",\r\n        \"description\":\"test\"\r\n    }\r\n]",
+							"raw": "[\r\n        {\r\n        \"link\":\"t\",\r\n        \"name\":\"tttt\",\r\n        \"price\":20.02,\r\n        \"image\":\"0\",\r\n        \"description\":\"test\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -253,17 +253,18 @@
 			"name": "Items",
 			"item": [
 				{
-					"name": "GET items",
+					"name": "GET item by id",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/items",
+							"raw": "{{URL}}/items/5",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
-								"items"
+								"items",
+								"5"
 							]
 						}
 					},
@@ -282,6 +283,56 @@
 							"path": [
 								"items",
 								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"image\":\"dsjkjsfjnfjefiwmed.l,\",\r\n    \"price\": 50.50,\r\n    \"description\": \"new desc\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/items/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"items",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/auth/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
 							]
 						}
 					},

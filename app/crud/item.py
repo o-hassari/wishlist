@@ -1,4 +1,5 @@
 from typing import List
+from sqlalchemy import update
 from sqlalchemy.orm import Session
 
 from ..models import wishlist as wishlist_model
@@ -24,6 +25,12 @@ def create_items(db: Session, items: List[wishlist_schema.ItemCreate], wishlist_
         db.refresh(obj)
     
     return citems_obj
+
+def update_item( db: Session, item: wishlist_schema.ItemUpdate, item_id: int):
+    item_dict = item.model_dump(exclude_defaults=True, exclude_none=True)
+    query = update(wishlist_model.Item).where(wishlist_model.Item.id == item_id).values(item_dict)
+    db.execute(query)
+    db.commit()
 
 def delete_item(db: Session, item_id: int):
      ditem = db.query(wishlist_model.Item).filter(wishlist_model.Item.id == item_id).delete()

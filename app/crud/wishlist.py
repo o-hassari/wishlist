@@ -11,21 +11,23 @@ def get_wishlist(db: Session, wishlist_id: int):
     return db.query(wishlist_model.Wishlist).filter(wishlist_model.Wishlist.id == wishlist_id)
 
 def create_wishlist(db: Session, wishlist: wishlist_schema.WishlistCreate):
-        wishlist_dict = wishlist.model_dump()
-        cwishlist = wishlist_model.Wishlist(**wishlist_dict)
+    wishlist_dict = wishlist.model_dump()
+    cwishlist = wishlist_model.Wishlist(**wishlist_dict)
 
-        db.add(cwishlist)
-        db.commit()
-        db.refresh(cwishlist)
+    db.add(cwishlist)
+    db.commit()
+    db.refresh(cwishlist)
 
-        return cwishlist
+    return cwishlist
 
 def update_wishlist(db: Session, wishlist: wishlist_schema.WishlistUpdate, wishlist_id: int):
-     wish_dict = wishlist.model_dump(exclude_defaults=True, exclude_none=True)
-     query = update(wishlist_model.Wishlist).where(wishlist_model.Wishlist.id == wishlist_id).values(wish_dict)
-     db.execute(query)
+    wish_dict = wishlist.model_dump(exclude_defaults=True, exclude_none=True)
+    query = update(wishlist_model.Wishlist).where(wishlist_model.Wishlist.id == wishlist_id).values(wish_dict)
+    db.execute(query)
+    db.commit()
+
 
 def delete_wishlist(db: Session, wishlist_id: int):
-     dwishlist = db.query(wishlist_model.Wishlist).filter(wishlist_model.Wishlist.id == wishlist_id).delete()
-     db.commit()
-     return dwishlist
+    dwishlist = db.query(wishlist_model.Wishlist).filter(wishlist_model.Wishlist.id == wishlist_id).delete()
+    db.commit()
+    return dwishlist
