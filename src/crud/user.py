@@ -4,8 +4,10 @@ from ..models import user as user_model
 from ..schemas import user as user_schema
 from ..utils import passwd_utils
 
+import uuid
 
-def get_user(db: Session, user_id: int):
+
+def get_user(db: Session, user_id: uuid.UUID):
     return db.query(user_model.User).filter(user_model.User.id == user_id).first() #db.query(user.User).filter(user.User.id == user_id).first()
 
 #def get_user_by_email(db: Session, email: str):
@@ -19,6 +21,7 @@ def create_user(db: Session, user: user_schema.UserCreate):
         hashed_pwd = passwd_utils.get_password_hash(user.password)
         user_dict = user.model_dump()
         user_dict['password'] = hashed_pwd
+        user_dict['id']= uuid.uuid4()
         cuser = user_model.User(**user_dict)
 
         db.add(cuser)
@@ -27,7 +30,7 @@ def create_user(db: Session, user: user_schema.UserCreate):
 
         return cuser
 
-def delete_user(db: Session, user_id: int):
+def delete_user(db: Session, user_id: uuid.UUID):
      duser = db.query(user_model.User).filter(user_model.User.id == user_id).delete()
      db.commit()
      return duser

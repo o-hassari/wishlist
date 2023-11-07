@@ -1,5 +1,6 @@
 import logging
 from typing import List
+import uuid
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
@@ -38,7 +39,7 @@ def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
         db.close()
 
 @router.get("/{id}", response_model=user_schema.User)
-def get_user(id: int, db: Session = Depends(get_db)):
+def get_user(id: uuid.UUID, db: Session = Depends(get_db)):
     user = crud_user.get_user(db, id)
 
     if not user:
@@ -47,7 +48,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     return user
 
 @router.delete("/{id}", response_model=None)
-def delete_user(id: int, db: Session = Depends(get_db)):
+def delete_user(id: uuid.UUID, db: Session = Depends(get_db)):
     user = crud_user.delete_user(db, id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id={id} does not exist")

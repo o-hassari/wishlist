@@ -17,13 +17,13 @@ pip freeze > requirements.txt
 
 ## To start server in dev mode (live server):
  ````bash
-uvicorn main:app --reload
+uvicorn main:src --reload
  ````
 
 ````bash
-uvicorn app.main:app --reload
+uvicorn src.main:app --reload
 ````
 
 ```bash
-gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:80
+gunicorn src.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:80
 ```

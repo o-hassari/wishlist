@@ -1,8 +1,9 @@
 from typing import List, Optional
+from uuid import UUID
 from pydantic import BaseModel
 
 class Wishlist(BaseModel):
-    id : int
+    id : UUID
     share_link: str
     name: str
     location: str
@@ -13,7 +14,7 @@ class WishlistCreate(BaseModel):
     name: str
     location: str
     description: str
-    user_id: int
+    user_id: UUID
 
 class WishlistUpdate(BaseModel):
     #share_link: Optional[str] = None
@@ -22,7 +23,7 @@ class WishlistUpdate(BaseModel):
     description: str | None = None   
 
 class Item(BaseModel):
-    id: int
+    id: UUID
     link: str
     name: str
     price: float
@@ -30,7 +31,7 @@ class Item(BaseModel):
     description: str
 
 class ItemWithWishlistId(Item):
-    wishlist_id: int
+    wishlist_id: UUID
 
 class ItemCreate(BaseModel):
     link: str

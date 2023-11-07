@@ -5,8 +5,13 @@ from pydantic import ValidationError
 
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from ..schemas.user import SystemUser
 
+from ..auth.oauth2 import get_current_user
+
+from ..database import get_db
+
+import uuid
 
 from ..schemas import wishlist as wishlist_schema
 from ..crud import wishlist as crud_wishlist
@@ -19,11 +24,11 @@ router = APIRouter(
 
 
 @router.get("", response_model=List[wishlist_schema.Wishlist])
-def get_wishlists(db: Session = Depends(get_db)):
-    return crud_wishlist.get_wishlists(db)
+def get_wishlists(db: Session = Depends(get_db), user: SystemUser = Depends(get_current_user)):
+    return crud_wishlist.get_user_wishlists(db, user.id)
 
 @router.get("/{wishlist_id}", response_model=wishlist_schema.Wishlist)
-def get_wishlist( wishlist_id: int, db: Session = Depends(get_db)):
+def get_wishlist( wishlist_id: uuid.UUID, db: Session = Depends(get_db)):
     wishlist = crud_wishlist.get_wishlist(db, wishlist_id)
     if wishlist.first() is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Wishlist with id={wishlist_id} does not exist")
@@ -48,7 +53,7 @@ def create_wishlist(wishlist: wishlist_schema.WishlistCreate, db: Session = Depe
         db.close()
         
 @router.get("/{wishlist_id}/items", response_model=wishlist_schema.WishlistItem)
-def get_wishlist_all( wishlist_id: int, db: Session = Depends(get_db)):
+def get_wishlist_all( wishlist_id: uuid.UUID, db: Session = Depends(get_db)):
     wishlist = crud_wishlist.get_wishlist(db, wishlist_id)
     if wishlist.first() is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Wishlist with id={wishlist_id} does not exist")
@@ -69,7 +74,7 @@ def get_wishlist_all( wishlist_id: int, db: Session = Depends(get_db)):
     return wishlist_schema.WishlistItem(id=wl.id,name=wl.name, share_link=wl.share_link, description= wl.description, location=wl.location, items=items_dict)
 
 @router.post("/{wishlist_id}/items", response_model= List[wishlist_schema.ItemWithWishlistId])
-def create_wishlist_items(wishlist_id: int, items: List[wishlist_schema.ItemCreate], db: Session = Depends(get_db)):
+def create_wishlist_items(wishlist_id: uuid.UUID, items: List[wishlist_schema.ItemCreate], db: Session = Depends(get_db)):
     wishlist = crud_wishlist.get_wishlist(db, wishlist_id)
     print(wishlist.first())
     if wishlist.first() is None:
