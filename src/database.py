@@ -17,6 +17,8 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
 
 Base = declarative_base()
 
+
+
 if not database_exists(engine.url):
     create_database(engine.url)
 

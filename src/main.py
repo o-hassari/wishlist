@@ -21,7 +21,11 @@ from .schemas.token import TokenSchema
 from .utils.passwd_utils import verify_password
 
 from .models import user as user_model
-#user.Base.metadata.create_all(bind=engine)
+
+from .models import wishlist as wishlist_model
+
+user_model.Base.metadata.create_all(bind=engine)
+wishlist_model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="wishlist", version="1.0.0")
 

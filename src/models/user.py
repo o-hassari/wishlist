@@ -18,6 +18,6 @@ class User(Base):
     #                    nullable=False, server_default=text('now()'))
     #disabled = Column(Boolean, nullable=False)
 
-class Account(Base):
+#class Account(Base):
     # activated_by_gen_pin, account_type, .... user 1,1-1,1 account
-    pass
+    #pass

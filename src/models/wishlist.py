@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from ..database import Base
 from fastapi_utils.guid_type import GUID
 
-class confidentialityEnum(enum.Enum): 
+class ConfidentialityEnum(enum.Enum): 
     private = "private"
     public = "public"
 
@@ -16,10 +16,10 @@ class Wishlist(Base):
     name = sa.Column(sa.String(100))
     location = sa.Column(sa.String(100))
     description = sa.Column(sa.Text)
-    confidentiality = sa.column(sa.Enum(confidentialityEnum))
+    confidentiality = sa.Column(sa.Enum(ConfidentialityEnum))
 
     user_id = sa.Column(GUID, sa.ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
-    
+
     user = relationship("User")
 
 
