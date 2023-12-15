@@ -1,19 +1,23 @@
 from typing import List, Optional
+from uuid import UUID
 from pydantic import BaseModel
 
+from src.models.wishlist import ConfidentialityEnum
+
 class Wishlist(BaseModel):
-    id : int
-    share_link: str
+    id : UUID
+    #share_link: str
+    confidentiality: ConfidentialityEnum
     name: str
     location: str
     description: str
 
 class WishlistCreate(BaseModel):
-    share_link: str
+    confidentiality: ConfidentialityEnum
     name: str
     location: str
     description: str
-    user_id: int
+    user_id: UUID
 
 class WishlistUpdate(BaseModel):
     #share_link: Optional[str] = None
@@ -22,7 +26,7 @@ class WishlistUpdate(BaseModel):
     description: str | None = None   
 
 class Item(BaseModel):
-    id: int
+    id: UUID
     link: str
     name: str
     price: float
@@ -30,7 +34,7 @@ class Item(BaseModel):
     description: str
 
 class ItemWithWishlistId(Item):
-    wishlist_id: int
+    wishlist_id: UUID
 
 class ItemCreate(BaseModel):
     link: str
