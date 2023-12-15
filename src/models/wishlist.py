@@ -20,7 +20,7 @@ class Wishlist(Base):
 
     user_id = sa.Column(GUID, sa.ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
 
-    user = relationship("User")
+    user = relationship("User")#, back_populates='wishlists'
 
 
 

@@ -2,15 +2,18 @@ from typing import List, Optional
 from uuid import UUID
 from pydantic import BaseModel
 
+from src.models.wishlist import ConfidentialityEnum
+
 class Wishlist(BaseModel):
     id : UUID
-    share_link: str
+    #share_link: str
+    confidentiality: ConfidentialityEnum
     name: str
     location: str
     description: str
 
 class WishlistCreate(BaseModel):
-    share_link: str
+    confidentiality: ConfidentialityEnum
     name: str
     location: str
     description: str
